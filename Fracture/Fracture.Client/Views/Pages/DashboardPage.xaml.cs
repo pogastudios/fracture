@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.TaskBar;
 
 namespace Fracture.Client.Views.Pages
 {
@@ -65,6 +66,8 @@ namespace Fracture.Client.Views.Pages
 
             FirstRunHelper.EnsureCurDir();
 
+            TaskBarProgress.SetState(Application.Current.MainWindow, TaskBarProgressState.Normal);
+
             foreach (var song in ViewModel.Songs)
             {
                 if (song.Status == FileStatus.Done)
@@ -107,6 +110,7 @@ namespace Fracture.Client.Views.Pages
 
             }
 
+            TaskBarProgress.SetState(Application.Current.MainWindow, TaskBarProgressState.None);
             btnConvert.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Collapsed;
         }
@@ -122,7 +126,14 @@ namespace Fracture.Client.Views.Pages
             {
                 var split = e.Data.Split('|');
                 var percStr = split[0].Replace('%', '\0');
-                _curSong.Progress = int.Parse(percStr);
+                var value = int.Parse(percStr);
+                _curSong.Progress = value;
+
+                Dispatcher.Invoke(() =>
+                {
+                    TaskBarProgress.SetValue(Application.Current.MainWindow, TaskBarProgressState.Normal, value);
+                });
+
             }
         }
 

@@ -77,7 +77,10 @@ namespace Fracture.Client
             GlobalAppData.InitCurrentDir = Directory.GetCurrentDirectory();
 
             if (!GlobalAppData.IsSetupComplete)
+            {
                 await FirstRunHelper.RunFirstTimeSetup();
+                GlobalAppData.IsSetupComplete = true;
+            }
 
             await _host.StartAsync();
         }
