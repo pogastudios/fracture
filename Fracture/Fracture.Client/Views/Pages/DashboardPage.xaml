@@ -1,0 +1,197 @@
+﻿<ui:UiPage x:Class="Fracture.Client.Views.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Fracture.Client.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="DashboardPage"
+    d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+
+    <Grid Margin="56,0" VerticalAlignment="Top"
+          Background="#01000000"
+          AllowDrop="True"
+          DragOver="Grid_DragOver"
+          DragLeave="Grid_DragLeave"
+          Drop="Grid_Drop">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="0"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="lvTracks"
+                 Grid.RowSpan="6"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 ItemsSource="{Binding ViewModel.Songs, Mode=OneWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Stretch="UniformToFill" Width="32" Height="32" Source="{Binding PreviewImage}"/>
+                        <TextBlock Text="{Binding Name}" 
+                                   Grid.Column="1"
+                                   Margin="10,0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis"/>
+
+                        <ProgressBar Value="{Binding Progress}" 
+                                     Visibility="{Binding ProgressVisibility}"
+                                     Height="4"
+                                     Minimum="0"
+                                     Maximum="100"
+                                     Foreground="{DynamicResource PaletteLightGreenBrush}"
+                                     Grid.Row="2"
+                                     Grid.ColumnSpan="3"/>
+
+                        <ui:SymbolIcon Symbol="CheckmarkStarburst24" 
+                                       Foreground="{DynamicResource PaletteLightGreenBrush}" 
+                                       Visibility="{Binding CheckmarkVisibility}"
+                                       Grid.Column="3"/>
+
+                        <ui:ProgressRing Width="24" Height="24" 
+                                         Foreground="{DynamicResource PaletteOrangeBrush}" 
+                                         Visibility="{Binding ProgressVisibility}"
+                                         IsIndeterminate="True"
+                                         Grid.Column="3"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Text="Isolate the following stems from your track:" Grid.Column="3" Grid.Row="1"
+                   TextAlignment="Center" HorizontalAlignment="Center"
+                   TextWrapping="Wrap"/>
+
+        <WrapPanel Grid.Column="3" Grid.Row="3">
+            <WrapPanel.Resources>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource DefaultToggleButtonStyle}">
+                    <Setter Property="Width" Value="100" />
+                    <Setter Property="Height" Value="100" />
+                    <Setter Property="Margin" Value="0,0,15,15" />
+                </Style>
+            </WrapPanel.Resources>
+            <ToggleButton IsChecked="True">
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon Symbol="Mic28" HorizontalAlignment="Center"/>
+                    <TextBlock Text="acapella" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton>
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon Symbol="MusicNote124" HorizontalAlignment="Center"/>
+                    <TextBlock Text="instrumental" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton>
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon Symbol="Box24" HorizontalAlignment="Center"/>
+                    <TextBlock Text="drums" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton>
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon Symbol="SoundWaveCircle24" HorizontalAlignment="Center"/>
+                    <TextBlock Text="bass" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton>
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon Symbol="SoundSource24" HorizontalAlignment="Center"/>
+                    <TextBlock Text="other" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ToggleButton>
+        </WrapPanel>
+
+        <Border BorderThickness="1" CornerRadius="20" Grid.Column="3" Grid.Row="4"
+                Padding="10" Background="#22FFFFFF">
+            <StackPanel>
+                <CheckBox Content="Use High Quality (4x slower)" Margin="0,10"/>
+
+                <Grid Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource DefaultToggleButtonStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </Grid.Resources>
+                    <RadioButton Content="WAV" Grid.Column="0" IsChecked="True"/>
+                    <RadioButton Content="AIFF" Grid.Column="1" Margin="5,0"/>
+                    <RadioButton Content="MP3" Grid.Column="2" />
+                </Grid>
+
+                <Grid Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBox PlaceholderText="Output Directory" Text="{Binding ViewModel.OutputPath}"/>
+
+                    <ui:Button Icon="Folder16" Content="Browse" Grid.Column="2" />
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <ui:Button x:Name="btnConvert" Content="Convert" Grid.Column="3" Grid.Row="6"
+                   Icon="ConvertRange24"
+                HorizontalAlignment="Stretch"
+                Height="60"
+                Click="btnConvert_Click"/>
+
+        <ui:Button x:Name="btnCancel" Content="Cancel" Grid.Column="3" Grid.Row="6"
+                   Icon="RecordStop24"
+                HorizontalAlignment="Stretch"
+                Height="60"
+                   Visibility="Collapsed"
+                Click="btnCancel_Click"/>
+
+        <Border x:Name="pnlDragOverlay"
+                CornerRadius="20"
+              Grid.ColumnSpan="20"
+              Grid.RowSpan="20"
+              IsHitTestVisible="False"
+              Background="{DynamicResource PalettePrimaryBrush}"
+              Visibility="Collapsed">
+            <TextBlock Text="Drop your audio files here..." 
+                       FontSize="50" VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       Opacity="0.2"/>
+        </Border>
+    </Grid>
+</ui:UiPage>
