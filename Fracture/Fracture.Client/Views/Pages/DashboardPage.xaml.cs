@@ -79,7 +79,7 @@ namespace Fracture.Client.Views.Pages
                 var psInfo = new ProcessStartInfo
                 {
                     FileName = "demucs",
-                    Arguments = $"-d cpu {song.Path} -o {ViewModel.OutputPath}",
+                    Arguments = $"-d cpu \"{song.Path}\" -o \"{ViewModel.OutputPath}\"",
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
